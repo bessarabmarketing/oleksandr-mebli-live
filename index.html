@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Олександр Меблі — тестове завдання</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap');
+:root{
+  --paper:#f7f3ec;
+  --paper-raised:#ffffff;
+  --ink:#241c15;
+  --ink-soft:#6b5f4f;
+  --line:#e6dccb;
+  --walnut:#8a4a26;
+  --walnut-deep:#5c2f18;
+  --walnut-tint:#f1e2d2;
+  --brass:#a8781f;
+  --slate:#33495a;
+  --slate-tint:#e7edf1;
+  --good:#3f7d4a;
+  --bad:#a8402f;
+  --shadow:0 1px 2px rgba(36,28,21,.06),0 8px 24px -12px rgba(36,28,21,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1a140d;
+    --paper-raised:#241b12;
+    --ink:#f1e7d8;
+    --ink-soft:#b5a58e;
+    --line:#3a2e20;
+    --walnut:#d68a4e;
+    --walnut-deep:#e8a668;
+    --walnut-tint:#332619;
+    --brass:#d9a83f;
+    --slate:#9db4c4;
+    --slate-tint:#20303b;
+    --good:#6bb476;
+    --bad:#e17b64;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1a140d;
+  --paper-raised:#241b12;
+  --ink:#f1e7d8;
+  --ink-soft:#b5a58e;
+  --line:#3a2e20;
+  --walnut:#d68a4e;
+  --walnut-deep:#e8a668;
+  --walnut-tint:#332619;
+  --brass:#d9a83f;
+  --slate:#9db4c4;
+  --slate-tint:#20303b;
+  --good:#6bb476;
+  --bad:#e17b64;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Source Sans 3',system-ui,-apple-system,Segoe UI,sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+/* ---------- shell ---------- */
+.shell{max-width:640px;margin:0 auto;padding:0 20px 64px;}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 0;border-bottom:1px solid var(--line);
+  margin-bottom:28px;
+}
+.brandline{display:flex;align-items:center;gap:10px;}
+.brandmark{
+  width:30px;height:30px;border-radius:8px;
+  background:var(--walnut);color:var(--paper-raised);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:600;font-size:15px;
+  flex-shrink:0;
+}
+.brandtext{font-size:13px;color:var(--ink-soft);letter-spacing:.02em;}
+.brandtext b{color:var(--ink);font-weight:600;}
+.clock{font-size:13px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;}
+.clock .dot{width:6px;height:6px;border-radius:50%;background:var(--line);}
+.clock.live .dot{background:var(--good);box-shadow:0 0 0 3px color-mix(in srgb, var(--good) 20%, transparent);}
+
+/* ---------- intro screen ---------- */
+.intro-card{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;
+  padding:32px 30px;box-shadow:var(--shadow);
+}
+.persona-row{display:flex;gap:18px;align-items:flex-start;margin-bottom:22px;}
+.avatar{
+  width:64px;height:64px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(155deg,var(--walnut),var(--walnut-deep));
+  color:#fff6ec;display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:600;font-size:26px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25);
+}
+h1{
+  font-family:'Fraunces',serif;font-weight:600;font-size:28px;line-height:1.1;
+  margin:0 0 6px;text-wrap:balance;letter-spacing:-.01em;
+}
+.role{font-size:14px;color:var(--walnut);font-weight:600;margin:0 0 8px;}
+.bio{font-size:15px;line-height:1.55;color:var(--ink-soft);margin:0;max-width:52ch;}
+.traits{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;}
+.trait{
+  font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--walnut-deep);
+  background:var(--walnut-tint);border-radius:20px;padding:4px 11px;
+}
+
+.divider{height:1px;background:var(--line);margin:24px 0;}
+
+.field label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:7px;}
+.field input[type=text]{
+  width:100%;border:1.5px solid var(--line);border-radius:10px;
+  padding:12px 14px;font-family:inherit;font-size:15px;
+  background:var(--paper);color:var(--ink);
+}
+.field input[type=text]:focus{outline:2px solid var(--walnut);outline-offset:1px;border-color:var(--walnut);}
+.field input[type=text]::placeholder{color:var(--ink-soft);opacity:.6;}
+.hint{font-size:12.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
+
+.btn{
+  appearance:none;border:none;border-radius:10px;
+  font-family:inherit;font-size:15px;font-weight:600;
+  padding:12px 22px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .1s ease, opacity .15s ease;
+  text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-primary{background:var(--walnut);color:#fff6ec;}
+.btn-primary:hover:not(:disabled){background:var(--walnut-deep);}
+.btn-ghost{background:transparent;color:var(--ink-soft);border:1.5px solid var(--line);}
+.btn-ghost:hover:not(:disabled){border-color:var(--walnut);color:var(--walnut);}
+.btn-row{display:flex;gap:10px;margin-top:22px;align-items:center;flex-wrap:wrap;}
+.btn-row .hint{margin:0;}
+
+/* ---------- chat screen ---------- */
+[hidden]{display:none !important;}
+.chat-head{
+  display:flex;align-items:center;gap:12px;
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:14px 14px 0 0;
+  padding:14px 18px;
+}
+.chat-head .avatar{width:38px;height:38px;border-radius:10px;font-size:16px;}
+.chat-head .who{flex:1;min-width:0;}
+.chat-head .who .name{font-family:'Fraunces',serif;font-weight:600;font-size:16px;}
+.chat-head .who .status{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:6px;}
+.chat-head .who .status .dot{width:6px;height:6px;border-radius:50%;background:var(--good);}
+
+.chat-window{
+  background:var(--paper);border:1px solid var(--line);border-top:none;
+  min-height:360px;max-height:52vh;overflow-y:auto;
+  padding:20px 18px;display:flex;flex-direction:column;gap:14px;
+}
+.msg{max-width:78%;display:flex;flex-direction:column;gap:4px;}
+.msg .label{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);}
+.msg .bubble{
+  padding:10px 14px;border-radius:14px;font-size:14.5px;line-height:1.5;
+  white-space:pre-wrap;word-wrap:break-word;
+}
+.msg.client{align-self:flex-start;}
+.msg.client .bubble{background:var(--walnut-tint);color:var(--ink);border-bottom-left-radius:4px;}
+.msg.client .label{color:var(--walnut-deep);}
+.msg.candidate{align-self:flex-end;}
+.msg.candidate .bubble{background:var(--slate);color:#f4f8fb;border-bottom-right-radius:4px;}
+.msg.candidate .label{align-self:flex-end;}
+.msg.system{align-self:center;max-width:90%;}
+.msg.system .bubble{background:transparent;color:var(--ink-soft);font-size:12.5px;text-align:center;padding:4px 10px;}
+
+.typing{display:flex;gap:4px;padding:12px 14px;background:var(--walnut-tint);border-radius:14px;border-bottom-left-radius:4px;width:fit-content;}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--walnut-deep);opacity:.5;animation:blink 1.2s infinite ease-in-out;}
+.typing span:nth-child(2){animation-delay:.2s;}
+.typing span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0);}40%{opacity:.9;transform:translateY(-2px);}}
+@media (prefers-reduced-motion: reduce){ .typing span{animation:none;opacity:.6;} }
+
+.chat-input{
+  background:var(--paper-raised);border:1px solid var(--line);border-top:none;
+  border-radius:0 0 14px 14px;padding:14px 16px;
+  display:flex;gap:10px;align-items:flex-end;
+}
+.chat-input textarea{
+  flex:1;resize:none;border:1.5px solid var(--line);border-radius:10px;
+  padding:11px 13px;font-family:inherit;font-size:14.5px;line-height:1.4;
+  background:var(--paper);color:var(--ink);max-height:120px;min-height:44px;
+}
+.chat-input textarea:focus{outline:2px solid var(--walnut);outline-offset:1px;border-color:var(--walnut);}
+.send-btn{
+  width:44px;height:44px;border-radius:10px;border:none;flex-shrink:0;
+  background:var(--walnut);color:#fff6ec;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s ease;
+}
+.send-btn:hover:not(:disabled){background:var(--walnut-deep);}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+.below-chat{display:flex;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap;gap:10px;}
+.counter{font-size:12.5px;color:var(--ink-soft);}
+
+.notice{
+  border-radius:10px;padding:11px 14px;font-size:13.5px;line-height:1.5;
+  border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);
+  margin-top:12px;
+}
+.notice.bad{border-color:color-mix(in srgb, var(--bad) 35%, var(--line));color:var(--bad);}
+
+.footnote{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:28px;line-height:1.6;}
+.footnote a{color:var(--walnut);}
+
+/* ---------- recording ---------- */
+.rec-pill{
+  display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
+  padding:4px 10px 4px 8px;border-radius:20px;border:1px solid var(--line);color:var(--ink-soft);
+}
+.rec-pill .rdot{width:7px;height:7px;border-radius:50%;background:var(--ink-soft);flex-shrink:0;}
+.rec-pill.on{color:var(--bad);border-color:color-mix(in srgb, var(--bad) 35%, var(--line));}
+.rec-pill.on .rdot{background:var(--bad);animation:recpulse 1.6s infinite ease-in-out;}
+.rec-pill.off .rdot{background:var(--ink-soft);}
+@keyframes recpulse{0%,100%{opacity:1;box-shadow:0 0 0 0 color-mix(in srgb, var(--bad) 40%, transparent);}50%{opacity:.65;box-shadow:0 0 0 4px transparent;}}
+@media (prefers-reduced-motion: reduce){ .rec-pill.on .rdot{animation:none;} }
+
+.finish-row{display:flex;justify-content:flex-end;margin-top:14px;}
+
+/* ---------- end screen ---------- */
+.end-card{
+  background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;
+  padding:32px 30px;box-shadow:var(--shadow);text-align:center;
+}
+.end-icon{
+  width:52px;height:52px;border-radius:50%;margin:0 auto 16px;
+  background:var(--walnut-tint);color:var(--walnut-deep);
+  display:flex;align-items:center;justify-content:center;
+}
+.end-card h2{font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:0 0 10px;}
+.end-card p{color:var(--ink-soft);font-size:14.5px;line-height:1.6;margin:0 0 18px;max-width:44ch;margin-left:auto;margin-right:auto;}
+.end-status{
+  text-align:left;border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+  margin:0 0 20px;font-size:13.5px;color:var(--ink-soft);line-height:1.6;background:var(--paper);
+}
+.end-status b{color:var(--ink);}
+.end-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+@media (max-width:520px){
+  .shell{padding:0 14px 48px;}
+  .intro-card{padding:24px 20px;}
+  h1{font-size:24px;}
+  .msg{max-width:88%;}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="brandline">
+      <div class="brandmark">BM</div>
+      <div class="brandtext">Тестове завдання · <b>Bessarab Marketing Agency</b></div>
+    </div>
+    <div class="clock" id="clock"><span class="dot"></span><span class="mono" id="clock-time">00:00</span></div>
+  </div>
+
+  <!-- ============ SCREEN 1: INTRO ============ -->
+  <div id="screen-intro">
+    <div class="intro-card">
+      <div class="persona-row">
+        <div class="avatar">ОМ</div>
+        <div>
+          <p class="role">Симуляція складного клієнта</p>
+          <h1>Олександр Меблі</h1>
+          <p class="bio">Олександр — власник невеликої компанії, що продає дизайнерські меблі преміум-сегменту. Він незадоволений і рекламою, і контентом, і зйомками — та хоче негайних пояснень від нового проджект-менеджера.</p>
+        </div>
+      </div>
+
+      <div class="traits">
+        <span class="trait">Нетерплячий</span>
+        <span class="trait">Любить цифри й конкретику</span>
+        <span class="trait">Не терпить «води»</span>
+        <span class="trait">Претензій одразу кілька</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <label for="name-input">Ваше ім'я</label>
+        <input type="text" id="name-input" placeholder="Напр. Марія" autocomplete="off" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="start-btn">Розпочати діалог</button>
+        <span class="hint">Браузер запитає дозвіл на запис екрана — оберіть «Ця вкладка».</span>
+      </div>
+    </div>
+
+    <p class="footnote">Це тестовий діалог для оцінки навичок комунікації зі складним клієнтом. Олександр — живий ШІ, він реально читає ваші повідомлення.<br>Пишіть так, як писали б реальному клієнту в месенджері. Проходження записується на екран — наприкінці зʼявиться файл для завантаження, який потрібно надіслати особі, що поділилася цим завданням.</p>
+  </div>
+
+  <!-- ============ SCREEN 2: CHAT ============ -->
+  <div id="screen-chat" hidden>
+    <div class="chat-head">
+      <div class="avatar">ОМ</div>
+      <div class="who">
+        <div class="name">Олександр Меблі</div>
+        <div class="status" id="chat-status"><span class="dot"></span><span>онлайн</span></div>
+      </div>
+      <span class="rec-pill off" id="rec-pill"><span class="rdot"></span><span id="rec-pill-text">без запису</span></span>
+      <button class="btn btn-ghost" id="restart-btn" style="padding:8px 14px;font-size:13px;">Почати заново</button>
+    </div>
+
+    <div class="chat-window" id="chat-window"></div>
+
+    <div class="chat-input">
+      <textarea id="msg-input" rows="1" placeholder="Напишіть відповідь Олександру…"></textarea>
+      <button class="send-btn" id="send-btn" aria-label="Надіслати" title="Надіслати">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+      </button>
+    </div>
+
+    <div class="below-chat">
+      <span class="counter" id="turn-counter">Повідомлень: 0</span>
+      <span class="counter">Орієнтир — 6–10 повідомлень</span>
+    </div>
+
+    <div id="notice-area"></div>
+
+    <div class="finish-row">
+      <button class="btn btn-primary" id="finish-btn">Завершити тестування</button>
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 3: END ============ -->
+  <div id="screen-end" hidden>
+    <div class="end-card">
+      <div class="end-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2>Діалог завершено</h2>
+      <p>Дякуємо за проходження тестового завдання. Нижче — що робити далі.</p>
+      <div class="end-status" id="end-status">Готуємо підсумок…</div>
+      <div class="end-actions">
+        <a class="btn btn-primary" id="download-video-btn" hidden>Завантажити відео запису</a>
+        <button class="btn btn-primary" id="copy-transcript-btn">Скопіювати переписку</button>
+        <button class="btn btn-ghost" id="download-transcript-btn">Завантажити переписку (.txt)</button>
+        <button class="btn btn-ghost" id="restart-btn-2">Пройти ще раз</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- opening line (shown instantly, not part of the API call) ----------
+  var OPENING_TEMPLATE = "Добрий день{{COMMA_NAME}}. Чесно, я вже на межі. Другий тиждень поспіль дивлюсь у рекламний кабінет — бюджет крутиться, а заявок як не було, так і нема. Попередній менеджер обіцяв «ось-ось буде результат» ще два тижні тому і зник. Поясніть мені, що взагалі відбувається і що ви плануєте з цим робити?";
+
+  function reasonCopy(code){
+    switch(code){
+      case 'gateway_not_ready': return 'Живий діалог тут ще не активовано на цьому сайті (потрібен перший продакшн-деплой на Netlify). Спробуйте ще раз за хвилину.';
+      case 'rate_limited': return 'Забагато повідомлень поспіль. Зачекайте кілька секунд і спробуйте ще раз.';
+      case 'upstream_error': return 'Тимчасова помилка зʼєднання з ШІ. Спробуйте надіслати ще раз.';
+      case 'empty_completion': return 'Відповідь не прийшла. Спробуйте написати трохи інакше.';
+      case 'bad_request': return 'Повідомлення не вдалося обробити. Спробуйте ще раз.';
+      case 'network_error': return 'Немає з’єднання з сервером. Перевірте інтернет і спробуйте ще раз.';
+      default: return 'Щось пішло не так. Спробуйте ще раз.';
+    }
+  }
+
+  // ---------- state ----------
+  var candidateName = "";
+  var openingText = "";
+  var apiMessages = []; // [{role:'user'|'assistant', content}] — sent to the function, starts on 'user'
+  var startedAt = null;
+  var clockTimer = null;
+  var sending = false;
+  var messageCount = 0;
+  var candidateTurns = 0;
+  var nudged = false;
+  var transcriptLines = []; // {who, text} — for copy/download only
+
+  var recStream = null;
+  var recRecorder = null;
+  var recChunks = [];
+  var recMimeType = 'video/webm';
+  var recBlob = null;
+  // 'idle' | 'active' | 'denied' | 'unsupported' | 'stopped-by-user' | 'saved'
+  var recState = 'idle';
+
+  // ---------- dom ----------
+  var screenIntro = document.getElementById('screen-intro');
+  var screenChat = document.getElementById('screen-chat');
+  var nameInput = document.getElementById('name-input');
+  var startBtn = document.getElementById('start-btn');
+  var restartBtn = document.getElementById('restart-btn');
+  var chatWindow = document.getElementById('chat-window');
+  var msgInput = document.getElementById('msg-input');
+  var sendBtn = document.getElementById('send-btn');
+  var turnCounter = document.getElementById('turn-counter');
+  var noticeArea = document.getElementById('notice-area');
+  var clockTime = document.getElementById('clock-time');
+  var clockEl = document.getElementById('clock');
+  var recPill = document.getElementById('rec-pill');
+  var recPillText = document.getElementById('rec-pill-text');
+  var finishBtn = document.getElementById('finish-btn');
+  var screenEnd = document.getElementById('screen-end');
+  var endStatus = document.getElementById('end-status');
+  var copyTranscriptBtn = document.getElementById('copy-transcript-btn');
+  var downloadTranscriptBtn = document.getElementById('download-transcript-btn');
+  var downloadVideoBtn = document.getElementById('download-video-btn');
+  var restartBtn2 = document.getElementById('restart-btn-2');
+
+  // ---------- helpers ----------
+  function addMessage(role, text){
+    var wrap = document.createElement('div');
+    wrap.className = 'msg ' + role;
+    var label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = role === 'client' ? 'Олександр' : (role === 'candidate' ? (candidateName || 'Ви') : '');
+    var bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    if (role !== 'system') wrap.appendChild(label);
+    wrap.appendChild(bubble);
+    chatWindow.appendChild(wrap);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    return bubble;
+  }
+
+  function showTyping(){
+    var wrap = document.createElement('div');
+    wrap.className = 'msg client';
+    wrap.id = 'typing-indicator';
+    var label = document.createElement('div');
+    label.className = 'label';
+    label.textContent = 'Олександр';
+    var t = document.createElement('div');
+    t.className = 'typing';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    wrap.appendChild(label);
+    wrap.appendChild(t);
+    chatWindow.appendChild(wrap);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    return wrap;
+  }
+
+  function removeTyping(){
+    var el = document.getElementById('typing-indicator');
+    if (el) el.remove();
+  }
+
+  function setNotice(text, isBad){
+    noticeArea.innerHTML = '';
+    if (!text) return;
+    var n = document.createElement('div');
+    n.className = 'notice' + (isBad ? ' bad' : '');
+    n.textContent = text;
+    noticeArea.appendChild(n);
+  }
+
+  function updateCounter(){
+    turnCounter.textContent = 'Повідомлень: ' + messageCount;
+  }
+
+  function startClock(){
+    startedAt = Date.now();
+    clockEl.classList.add('live');
+    clockTimer = setInterval(function(){
+      var s = Math.floor((Date.now() - startedAt) / 1000);
+      var mm = String(Math.floor(s/60)).padStart(2,'0');
+      var ss = String(s%60).padStart(2,'0');
+      clockTime.textContent = mm + ':' + ss;
+    }, 1000);
+  }
+
+  function autoGrow(){
+    msgInput.style.height = 'auto';
+    msgInput.style.height = Math.min(msgInput.scrollHeight, 120) + 'px';
+  }
+
+  function escapeHtml(str){
+    var d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // ---------- recording ----------
+  function updateRecPill(){
+    recPill.classList.remove('on','off');
+    switch(recState){
+      case 'active':
+        recPill.classList.add('on');
+        recPillText.textContent = 'запис екрана';
+        break;
+      case 'saved':
+        recPill.classList.add('off');
+        recPillText.textContent = 'запис збережено';
+        break;
+      default:
+        recPill.classList.add('off');
+        recPillText.textContent = 'без запису';
+    }
+  }
+
+  async function startRecording(){
+    try{
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia){
+        recState = 'unsupported';
+        updateRecPill();
+        return;
+      }
+      recStream = await navigator.mediaDevices.getDisplayMedia({ video: { cursor: 'always' }, audio: false });
+      recChunks = [];
+      var candidates = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+      recMimeType = 'video/webm';
+      for (var i = 0; i < candidates.length; i++){
+        if (window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(candidates[i])){
+          recMimeType = candidates[i];
+          break;
+        }
+      }
+      recRecorder = new MediaRecorder(recStream, { mimeType: recMimeType });
+      recRecorder.ondataavailable = function(e){ if (e.data && e.data.size > 0) recChunks.push(e.data); };
+      recRecorder.start(1000);
+      recState = 'active';
+      var track = recStream.getVideoTracks()[0];
+      if (track){
+        track.onended = function(){
+          if (recState === 'active') recState = 'stopped-by-user';
+          updateRecPill();
+        };
+      }
+    }catch(e){
+      recState = 'denied';
+    }
+    updateRecPill();
+  }
+
+  function stopRecordingAsync(){
+    return new Promise(function(resolve){
+      if (!recRecorder || recRecorder.state === 'inactive'){
+        resolve(null);
+        return;
+      }
+      recRecorder.onstop = function(){
+        var tracks = recStream ? recStream.getTracks() : [];
+        for (var i = 0; i < tracks.length; i++) tracks[i].stop();
+        if (recChunks.length === 0){ resolve(null); return; }
+        resolve(new Blob(recChunks, { type: recMimeType }));
+      };
+      recRecorder.stop();
+    });
+  }
+
+  function slugify(str){
+    return (str || 'candidate')
+      .toLowerCase()
+      .replace(/[^a-zа-яіїєё0-9]+/gi, '-')
+      .replace(/^-+|-+$/g, '') || 'candidate';
+  }
+
+  function buildFilename(ext){
+    var d = new Date();
+    var stamp = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    return 'oleksandr-mebli-' + slugify(candidateName) + '-' + stamp + '.' + ext;
+  }
+
+  function triggerDownload(blob, filename){
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    return url;
+  }
+
+  function buildTranscript(){
+    var lines = ['Тестовий діалог «Олександр Меблі»', 'Кандидат: ' + candidateName, 'Дата: ' + new Date().toLocaleString('uk-UA'), ''];
+    for (var i = 0; i < transcriptLines.length; i++){
+      var t = transcriptLines[i];
+      lines.push(t.who + ':');
+      lines.push(t.text);
+      lines.push('');
+    }
+    return lines.join('\n');
+  }
+
+  // ---------- flow ----------
+  async function goToChat(){
+    candidateName = (nameInput.value || '').trim();
+    if (!candidateName){
+      nameInput.focus();
+      nameInput.style.borderColor = 'var(--bad)';
+      return;
+    }
+    startBtn.disabled = true;
+    startBtn.textContent = 'Запитуємо доступ до екрана…';
+    await startRecording();
+    startBtn.disabled = false;
+    startBtn.textContent = 'Розпочати діалог';
+
+    screenIntro.hidden = true;
+    screenChat.hidden = false;
+    screenEnd.hidden = true;
+    startClock();
+    updateRecPill();
+
+    openingText = OPENING_TEMPLATE.replace('{{COMMA_NAME}}', ', ' + candidateName);
+    apiMessages = []; // opening line is NOT sent as history — the function's system prompt already knows it
+    transcriptLines = [{ who: 'Олександр', text: openingText }];
+    addMessage('client', openingText);
+    messageCount = 1;
+    updateCounter();
+    msgInput.focus();
+  }
+
+  async function finishTest(){
+    finishBtn.disabled = true;
+    finishBtn.textContent = 'Завершуємо…';
+    if (clockTimer) clearInterval(clockTimer);
+
+    recBlob = await stopRecordingAsync();
+
+    screenChat.hidden = true;
+    screenEnd.hidden = false;
+
+    var statusLines = [];
+    statusLines.push('<b>Кандидат:</b> ' + escapeHtml(candidateName));
+    statusLines.push('<b>Повідомлень у діалозі:</b> ' + messageCount);
+
+    if (recBlob){
+      try{
+        triggerDownload(recBlob, buildFilename('webm'));
+        recState = 'saved';
+        downloadVideoBtn.href = URL.createObjectURL(recBlob);
+        downloadVideoBtn.download = buildFilename('webm');
+        downloadVideoBtn.hidden = false;
+        statusLines.push('<b>Запис екрана:</b> завантажується у ваші файли. Якщо завантаження не почалось — натисніть кнопку «Завантажити відео запису» нижче. Надішліть цей файл особі, яка поділилася з вами цим завданням.');
+      }catch(e){
+        statusLines.push('<b>Запис екрана:</b> не вдалося підготувати файл для завантаження. Скопіюйте, будь ласка, переписку нижче і надішліть її текстом.');
+      }
+    } else if (recState === 'denied'){
+      statusLines.push('<b>Запис екрана:</b> доступ не було надано. Скопіюйте, будь ласка, переписку нижче і надішліть її текстом.');
+    } else if (recState === 'unsupported'){
+      statusLines.push('<b>Запис екрана:</b> недоступний у цьому браузері (спробуйте Chrome або Edge на комп’ютері). Скопіюйте, будь ласка, переписку нижче.');
+    } else if (recState === 'stopped-by-user'){
+      statusLines.push('<b>Запис екрана:</b> був зупинений достроково. Скопіюйте, будь ласка, переписку нижче про всяк випадок.');
+    } else {
+      statusLines.push('<b>Запис екрана:</b> запис не містив кадрів. Скопіюйте, будь ласка, переписку нижче.');
+    }
+
+    endStatus.innerHTML = statusLines.join('<br>');
+    updateRecPill();
+  }
+
+  async function sendMessage(){
+    var text = (msgInput.value || '').trim();
+    if (!text || sending) return;
+
+    sending = true;
+    sendBtn.disabled = true;
+    setNotice('');
+
+    addMessage('candidate', text);
+    transcriptLines.push({ who: candidateName, text: text });
+    apiMessages.push({ role: 'user', content: text });
+    messageCount++;
+    candidateTurns++;
+    updateCounter();
+
+    msgInput.value = '';
+    autoGrow();
+
+    if (candidateTurns === 10 && !nudged){
+      nudged = true;
+      setNotice('Достатньо для оцінки — можна натиснути «Завершити тестування», коли будете готові.');
+    }
+
+    showTyping();
+
+    try{
+      var res = await fetch('/.netlify/functions/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          messages: apiMessages,
+          openingText: openingText,
+          candidateName: candidateName
+        })
+      });
+      var data = null;
+      try{ data = await res.json(); }catch(e){ data = null; }
+
+      removeTyping();
+
+      if (!res.ok || !data || data.error){
+        // roll back the turn we optimistically added so a retry doesn't duplicate it
+        apiMessages.pop();
+        setNotice(reasonCopy(data && data.error), true);
+      } else {
+        addMessage('client', data.text);
+        transcriptLines.push({ who: 'Олександр', text: data.text });
+        apiMessages.push({ role: 'assistant', content: data.text });
+        messageCount++;
+        updateCounter();
+      }
+    }catch(e){
+      removeTyping();
+      apiMessages.pop();
+      setNotice(reasonCopy('network_error'), true);
+    }finally{
+      sending = false;
+      sendBtn.disabled = false;
+      msgInput.focus();
+    }
+  }
+
+  function restart(){
+    if (clockTimer) clearInterval(clockTimer);
+    clockEl.classList.remove('live');
+    clockTime.textContent = '00:00';
+    messageCount = 0;
+    candidateTurns = 0;
+    nudged = false;
+    apiMessages = [];
+    transcriptLines = [];
+    chatWindow.innerHTML = '';
+    noticeArea.innerHTML = '';
+    msgInput.value = '';
+
+    if (recRecorder && recRecorder.state !== 'inactive'){
+      try{ recRecorder.stop(); }catch(e){}
+    }
+    if (recStream){
+      recStream.getTracks().forEach(function(t){ t.stop(); });
+    }
+    recState = 'idle';
+    recChunks = [];
+    recBlob = null;
+    downloadVideoBtn.hidden = true;
+    updateRecPill();
+
+    screenChat.hidden = true;
+    screenEnd.hidden = true;
+    screenIntro.hidden = false;
+    finishBtn.disabled = false;
+    finishBtn.textContent = 'Завершити тестування';
+    nameInput.value = '';
+    nameInput.style.borderColor = '';
+    nameInput.focus();
+  }
+
+  // ---------- events ----------
+  startBtn.addEventListener('click', goToChat);
+  nameInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') goToChat(); });
+  nameInput.addEventListener('input', function(){ nameInput.style.borderColor = ''; });
+
+  sendBtn.addEventListener('click', sendMessage);
+  msgInput.addEventListener('input', autoGrow);
+  msgInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.shiftKey){
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+  restartBtn.addEventListener('click', restart);
+  restartBtn2.addEventListener('click', restart);
+  finishBtn.addEventListener('click', finishTest);
+
+  copyTranscriptBtn.addEventListener('click', async function(){
+    var text = buildTranscript();
+    try{
+      await navigator.clipboard.writeText(text);
+      copyTranscriptBtn.textContent = 'Скопійовано ✓';
+      setTimeout(function(){ copyTranscriptBtn.textContent = 'Скопіювати переписку'; }, 2000);
+    }catch(e){
+      copyTranscriptBtn.textContent = 'Не вдалося скопіювати';
+      setTimeout(function(){ copyTranscriptBtn.textContent = 'Скопіювати переписку'; }, 2000);
+    }
+  });
+
+  downloadTranscriptBtn.addEventListener('click', function(){
+    var blob = new Blob([buildTranscript()], { type: 'text/plain;charset=utf-8' });
+    triggerDownload(blob, buildFilename('txt'));
+  });
+
+})();
+</script>
+</body>
+</html>
