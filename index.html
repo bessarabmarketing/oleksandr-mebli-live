@@ -96,6 +96,22 @@ h1{
 }
 .field input[type=text]:focus{outline:2px solid var(--lime);outline-offset:1px;border-color:var(--lime);}
 .field input[type=text]::placeholder{color:var(--ink-soft);opacity:.6;}
+.field textarea{
+  width:100%;border:1.5px solid var(--line);border-radius:3px;
+  padding:12px 14px;font-family:inherit;font-size:14.5px;line-height:1.5;resize:vertical;min-height:56px;
+  background:var(--bg-sunken);color:var(--ink);
+}
+.field textarea:focus{outline:2px solid var(--lime);outline-offset:1px;border-color:var(--lime);}
+.field textarea::placeholder{color:var(--ink-soft);opacity:.6;}
+.field select{
+  width:100%;border:1.5px solid var(--line);border-radius:3px;
+  padding:12px 30px 12px 14px;font-family:inherit;font-size:14px;
+  background:var(--bg-sunken);color:var(--ink);appearance:none;
+  text-overflow:ellipsis;white-space:nowrap;overflow:hidden;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239c988c' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;background-size:15px;
+}
+.field select:focus{outline:2px solid var(--lime);outline-offset:1px;border-color:var(--lime);}
 .hint{font-size:12.5px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
 
 .btn{
@@ -202,6 +218,25 @@ h1{
 
 .finish-row{display:flex;justify-content:flex-end;margin-top:14px;}
 
+/* ---------- tasks screen ---------- */
+.tasks-intro{margin-bottom:20px;}
+.task-card{
+  position:relative;background:var(--bg-raised);border:1px solid var(--line);border-radius:4px;
+  padding:20px;margin-bottom:14px;
+}
+.task-num{
+  font-family:'Oswald',sans-serif;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--lime);
+  margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;
+}
+.task-remove{
+  appearance:none;border:none;background:transparent;color:var(--ink-soft);cursor:pointer;
+  font-size:19px;line-height:1;padding:0 4px;border-radius:3px;
+}
+.task-remove:hover{color:var(--bad);}
+.task-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+.task-grid-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.add-task-row{display:flex;justify-content:center;margin:4px 0 20px;}
+
 /* ---------- end screen ---------- */
 .end-card{
   position:relative;overflow:hidden;
@@ -231,6 +266,7 @@ h1{
   .intro-card{padding:24px 20px;}
   h1{font-size:26px;}
   .msg{max-width:88%;}
+  .task-grid-meta{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -282,12 +318,12 @@ h1{
 
   <!-- ============ SCREEN 2: CHAT ============ -->
   <div id="screen-chat" hidden>
-    <div class="phase-label" id="phase-label">Частина 1 з 2 · Спілкування з клієнтом</div>
+    <div class="phase-label">Частина 1 з 2 · Спілкування з клієнтом</div>
     <div class="chat-head">
-      <div class="avatar" id="chat-avatar">ОМ</div>
+      <div class="avatar">ОМ</div>
       <div class="who">
-        <div class="name" id="chat-name">Олександр Меблі</div>
-        <div class="status" id="chat-status"><span class="dot"></span><span id="chat-status-text">онлайн</span></div>
+        <div class="name">Олександр Меблі</div>
+        <div class="status" id="chat-status"><span class="dot"></span><span>онлайн</span></div>
       </div>
       <span class="rec-pill off" id="rec-pill"><span class="rdot"></span><span id="rec-pill-text">без запису</span></span>
       <button class="btn btn-ghost" id="restart-btn" style="padding:8px 14px;font-size:13px;">Почати заново</button>
@@ -304,7 +340,7 @@ h1{
 
     <div class="below-chat">
       <span class="counter" id="turn-counter">Повідомлень: 0</span>
-      <span class="counter" id="turn-hint">Орієнтир — 6–10 повідомлень</span>
+      <span class="counter">Орієнтир — 6–10 повідомлень</span>
     </div>
 
     <div id="notice-area"></div>
@@ -314,30 +350,25 @@ h1{
     </div>
   </div>
 
-  <!-- ============ SCREEN 2b: TRANSITION TO PART 2 ============ -->
-  <div id="screen-transition" hidden>
-    <div class="intro-card">
-      <div class="persona-row">
-        <div class="avatar">КМ</div>
-        <div>
-          <p class="role">Частина 2 з 2 · Постановка завдань</p>
-          <h1>Робочий чат команди</h1>
-          <p class="bio">Дзвінок з Олександром щойно завершився. За цим клієнтом працюють троє спеціалістів — Оля (SMM), Богдан (таргет) і Настя (зйомки). Кожен з них зараз завантажений іншими задачами й чекає від вас чітких доручень за підсумками розмови.</p>
-        </div>
-      </div>
+  <!-- ============ SCREEN 2b: TASKS ============ -->
+  <div id="screen-tasks" hidden>
+    <div class="phase-label">Частина 2 з 2 · Постановка завдань команді</div>
+    <div class="intro-card tasks-intro">
+      <p class="role">За підсумками розмови</p>
+      <h1>Роздайте завдання команді</h1>
+      <p class="bio">Дзвінок з Олександром щойно завершився. За цим клієнтом працюють троє спеціалістів — Оля (SMM), Богдан (таргетована реклама) і Настя (зйомки). Розпишіть завдання, які випливають з розмови: що зробити, кому доручити і до коли.</p>
+    </div>
 
-      <div class="traits">
-        <span class="trait">Потрібна конкретика</span>
-        <span class="trait">Дедлайн і пріоритет</span>
-        <span class="trait">Хто за що відповідає</span>
-      </div>
+    <div id="task-rows"></div>
 
-      <div class="divider"></div>
+    <div class="add-task-row">
+      <button class="btn btn-ghost" id="add-task-btn">+ Додати завдання</button>
+    </div>
 
-      <div class="btn-row">
-        <button class="btn btn-primary" id="start-team-btn">Перейти до постановки завдань</button>
-        <span class="hint">Запис екрана триває без перерви.</span>
-      </div>
+    <div id="tasks-notice-area"></div>
+
+    <div class="finish-row">
+      <button class="btn btn-primary" id="tasks-finish-btn">Завершити тестування</button>
     </div>
   </div>
 
@@ -368,7 +399,19 @@ h1{
   // ---------- opening line (shown instantly, not part of the API call) ----------
   var OPENING_TEMPLATE = "Добрий день{{COMMA_NAME}}. Чесно, я вже на межі. Другий тиждень поспіль дивлюсь у рекламний кабінет — бюджет крутиться, а заявок як не було, так і нема. Попередній менеджер обіцяв «ось-ось буде результат» ще два тижні тому і зник. Поясніть мені, що взагалі відбувається і що ви плануєте з цим робити?";
 
-  var TEAM_OPENING_TEMPLATE = "Привіт{{COMMA_NAME}}! Чули, що дзвінок з Олександром був непростий 🙈 Ми всі на звʼязку — скидай сюди, що потрібно зробити, розберемось.";
+  var ASSIGNEES = [
+    { value: '', label: 'Оберіть спеціаліста' },
+    { value: 'Оля — SMM', label: 'Оля — SMM' },
+    { value: 'Богдан — Таргет', label: 'Богдан — Таргет' },
+    { value: 'Настя — Зйомки', label: 'Настя — Зйомки' }
+  ];
+  var PRIORITIES = [
+    { value: '', label: 'Пріоритет' },
+    { value: 'Терміново', label: 'Терміново' },
+    { value: 'Високий', label: 'Високий' },
+    { value: 'Середній', label: 'Середній' },
+    { value: 'Низький', label: 'Низький' }
+  ];
 
   function reasonCopy(code){
     switch(code){
@@ -384,12 +427,8 @@ h1{
 
   // ---------- state ----------
   var candidateName = "";
-  var currentPhase = 'client'; // 'client' | 'team'
   var openingText = "";
-  var teamOpeningText = "";
-  var apiMessagesClient = []; // [{role:'user'|'assistant', content}] — sent to the function, starts on 'user'
-  var apiMessagesTeam = [];
-  var apiMessages = apiMessagesClient; // pointer to whichever array is active
+  var apiMessages = []; // [{role:'user'|'assistant', content}] — sent to the function, starts on 'user'
   var startedAt = null;
   var clockTimer = null;
   var sending = false;
@@ -397,6 +436,7 @@ h1{
   var candidateTurns = 0;
   var nudged = false;
   var transcriptLines = []; // {who, text} — for copy/download only
+  var lastTasksCount = 0;
 
   var recStream = null;
   var recRecorder = null;
@@ -409,13 +449,11 @@ h1{
   // ---------- dom ----------
   var screenIntro = document.getElementById('screen-intro');
   var screenChat = document.getElementById('screen-chat');
-  var screenTransition = document.getElementById('screen-transition');
-  var startTeamBtn = document.getElementById('start-team-btn');
-  var phaseLabel = document.getElementById('phase-label');
-  var chatAvatar = document.getElementById('chat-avatar');
-  var chatName = document.getElementById('chat-name');
-  var chatStatusText = document.getElementById('chat-status-text');
-  var turnHint = document.getElementById('turn-hint');
+  var screenTasks = document.getElementById('screen-tasks');
+  var taskRows = document.getElementById('task-rows');
+  var addTaskBtn = document.getElementById('add-task-btn');
+  var tasksFinishBtn = document.getElementById('tasks-finish-btn');
+  var tasksNoticeArea = document.getElementById('tasks-notice-area');
   var nameInput = document.getElementById('name-input');
   var startBtn = document.getElementById('start-btn');
   var restartBtn = document.getElementById('restart-btn');
@@ -442,7 +480,7 @@ h1{
     wrap.className = 'msg ' + role;
     var label = document.createElement('div');
     label.className = 'label';
-    label.textContent = role === 'client' ? (currentPhase === 'team' ? 'Команда' : 'Олександр') : (role === 'candidate' ? (candidateName || 'Ви') : '');
+    label.textContent = role === 'client' ? 'Олександр' : (role === 'candidate' ? (candidateName || 'Ви') : '');
     var bubble = document.createElement('div');
     bubble.className = 'bubble';
     bubble.textContent = text;
@@ -459,7 +497,7 @@ h1{
     wrap.id = 'typing-indicator';
     var label = document.createElement('div');
     label.className = 'label';
-    label.textContent = currentPhase === 'team' ? 'Команда' : 'Олександр';
+    label.textContent = 'Олександр';
     var t = document.createElement('div');
     t.className = 'typing';
     t.innerHTML = '<span></span><span></span><span></span>';
@@ -508,6 +546,128 @@ h1{
     var d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
+  }
+
+  // ---------- task rows (part 2) ----------
+  function buildSelect(className, options){
+    var sel = document.createElement('select');
+    sel.className = className;
+    options.forEach(function(opt){
+      var o = document.createElement('option');
+      o.value = opt.value;
+      o.textContent = opt.label;
+      sel.appendChild(o);
+    });
+    return sel;
+  }
+
+  function renumberTasks(){
+    var cards = taskRows.querySelectorAll('.task-card');
+    cards.forEach(function(c, i){
+      c.querySelector('.task-num-text').textContent = 'Завдання ' + (i + 1);
+    });
+  }
+
+  function createTaskRow(){
+    var card = document.createElement('div');
+    card.className = 'task-card';
+
+    var head = document.createElement('div');
+    head.className = 'task-num';
+    var numText = document.createElement('span');
+    numText.className = 'task-num-text';
+    numText.textContent = 'Завдання';
+    var removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'task-remove';
+    removeBtn.setAttribute('aria-label', 'Видалити завдання');
+    removeBtn.innerHTML = '&times;';
+    removeBtn.addEventListener('click', function(){
+      card.remove();
+      if (taskRows.children.length === 0){ createTaskRow(); return; }
+      renumberTasks();
+    });
+    head.appendChild(numText);
+    head.appendChild(removeBtn);
+
+    var grid = document.createElement('div');
+    grid.className = 'task-grid';
+
+    var descField = document.createElement('div');
+    descField.className = 'field';
+    var descLabel = document.createElement('label');
+    descLabel.textContent = 'Що зробити';
+    var descArea = document.createElement('textarea');
+    descArea.className = 'task-desc';
+    descArea.rows = 2;
+    descArea.placeholder = 'Напр. Онови контент-план на цей тиждень і погодь дати публікацій';
+    descField.appendChild(descLabel);
+    descField.appendChild(descArea);
+
+    var metaGrid = document.createElement('div');
+    metaGrid.className = 'task-grid-meta';
+
+    var assigneeField = document.createElement('div');
+    assigneeField.className = 'field';
+    var assigneeLabel = document.createElement('label');
+    assigneeLabel.textContent = 'Кому';
+    assigneeField.appendChild(assigneeLabel);
+    assigneeField.appendChild(buildSelect('task-assignee', ASSIGNEES));
+
+    var deadlineField = document.createElement('div');
+    deadlineField.className = 'field';
+    var deadlineLabel = document.createElement('label');
+    deadlineLabel.textContent = 'Дедлайн';
+    var deadlineInput = document.createElement('input');
+    deadlineInput.type = 'text';
+    deadlineInput.className = 'task-deadline';
+    deadlineInput.placeholder = 'Напр. до пʼятниці 17:00';
+    deadlineField.appendChild(deadlineLabel);
+    deadlineField.appendChild(deadlineInput);
+
+    var priorityField = document.createElement('div');
+    priorityField.className = 'field';
+    var priorityLabel = document.createElement('label');
+    priorityLabel.textContent = 'Пріоритет';
+    priorityField.appendChild(priorityLabel);
+    priorityField.appendChild(buildSelect('task-priority', PRIORITIES));
+
+    metaGrid.appendChild(assigneeField);
+    metaGrid.appendChild(deadlineField);
+    metaGrid.appendChild(priorityField);
+
+    grid.appendChild(descField);
+    grid.appendChild(metaGrid);
+
+    card.appendChild(head);
+    card.appendChild(grid);
+    taskRows.appendChild(card);
+    renumberTasks();
+    return card;
+  }
+
+  function resetTasksScreen(){
+    taskRows.innerHTML = '';
+    tasksNoticeArea.innerHTML = '';
+    createTaskRow();
+    createTaskRow();
+    createTaskRow();
+  }
+
+  function collectTasks(){
+    var cards = taskRows.querySelectorAll('.task-card');
+    var tasks = [];
+    cards.forEach(function(c){
+      var desc = c.querySelector('.task-desc').value.trim();
+      if (!desc) return;
+      tasks.push({
+        desc: desc,
+        assignee: c.querySelector('.task-assignee').value,
+        deadline: c.querySelector('.task-deadline').value.trim(),
+        priority: c.querySelector('.task-priority').value
+      });
+    });
+    return tasks;
   }
 
   // ---------- recording ----------
@@ -632,17 +792,15 @@ h1{
     startBtn.disabled = false;
     startBtn.textContent = 'Розпочати діалог';
 
-    currentPhase = 'client';
     screenIntro.hidden = true;
-    screenTransition.hidden = true;
+    screenTasks.hidden = true;
     screenChat.hidden = false;
     screenEnd.hidden = true;
     startClock();
     updateRecPill();
 
     openingText = OPENING_TEMPLATE.replace('{{COMMA_NAME}}', ', ' + candidateName);
-    apiMessagesClient = [];
-    apiMessages = apiMessagesClient; // opening line is NOT sent as history — the function's system prompt already knows it
+    apiMessages = []; // opening line is NOT sent as history — the function's system prompt already knows it
     transcriptLines = [{ who: 'Олександр', text: openingText }];
     addMessage('client', openingText);
     messageCount = 1;
@@ -650,55 +808,54 @@ h1{
     msgInput.focus();
   }
 
-  function goToTransition(){
+  function goToTasks(){
     screenChat.hidden = true;
-    screenTransition.hidden = false;
+    screenTasks.hidden = false;
+    resetTasksScreen();
   }
 
-  async function goToTeamChat(){
-    currentPhase = 'team';
-    candidateTurns = 0;
-    nudged = false;
+  async function goToEndFromTasks(){
+    var tasks = collectTasks();
+    if (tasks.length === 0){
+      tasksNoticeArea.innerHTML = '';
+      var n = document.createElement('div');
+      n.className = 'notice bad';
+      n.textContent = 'Додайте хоча б одне завдання перед завершенням.';
+      tasksNoticeArea.appendChild(n);
+      return;
+    }
+    tasksNoticeArea.innerHTML = '';
+    lastTasksCount = tasks.length;
 
-    screenTransition.hidden = true;
-    screenChat.hidden = false;
+    transcriptLines.push({ who: '', text: '── Частина 2: завдання для команди ──' });
+    tasks.forEach(function(t, i){
+      var line = (i + 1) + '. ' + t.desc +
+        '\n   Кому: ' + (t.assignee || '—') +
+        ' · Дедлайн: ' + (t.deadline || '—') +
+        ' · Пріоритет: ' + (t.priority || '—');
+      transcriptLines.push({ who: '', text: line });
+    });
 
-    phaseLabel.textContent = 'Частина 2 з 2 · Постановка завдань команді';
-    chatAvatar.textContent = 'КМ';
-    chatName.textContent = 'Команда проєкту';
-    chatStatusText.textContent = 'на звʼязку';
-    msgInput.placeholder = 'Напишіть завдання команді…';
-    turnHint.textContent = 'Орієнтир — 3–5 повідомлень';
-    finishBtn.disabled = false;
-    finishBtn.textContent = 'Завершити тестування';
-
-    chatWindow.innerHTML = '';
-    noticeArea.innerHTML = '';
-
-    teamOpeningText = TEAM_OPENING_TEMPLATE.replace('{{COMMA_NAME}}', ', ' + candidateName);
-    apiMessagesTeam = [];
-    apiMessages = apiMessagesTeam;
-    transcriptLines.push({ who: '', text: '── Частина 2: постановка завдань команді ──' });
-    transcriptLines.push({ who: 'Команда', text: teamOpeningText });
-    addMessage('client', teamOpeningText);
-    messageCount++;
-    updateCounter();
-    msgInput.focus();
+    await finishTest();
   }
 
   async function finishTest(){
-    finishBtn.disabled = true;
-    finishBtn.textContent = 'Завершуємо…';
+    tasksFinishBtn.disabled = true;
+    tasksFinishBtn.textContent = 'Завершуємо…';
     if (clockTimer) clearInterval(clockTimer);
 
     recBlob = await stopRecordingAsync();
 
     screenChat.hidden = true;
+    screenTasks.hidden = true;
     screenEnd.hidden = false;
 
     var statusLines = [];
     statusLines.push('<b>Кандидат:</b> ' + escapeHtml(candidateName));
-    statusLines.push('<b>Повідомлень у діалозі:</b> ' + messageCount);
+    statusLines.push('<b>Повідомлень у діалозі з клієнтом:</b> ' + messageCount);
+    if (lastTasksCount > 0){
+      statusLines.push('<b>Завдань для команди:</b> ' + lastTasksCount);
+    }
 
     if (recBlob){
       try{
@@ -743,13 +900,9 @@ h1{
     msgInput.value = '';
     autoGrow();
 
-    var nudgeAt = currentPhase === 'team' ? 4 : 10;
-    if (candidateTurns === nudgeAt && !nudged){
+    if (candidateTurns === 10 && !nudged){
       nudged = true;
-      var nudgeMsg = currentPhase === 'team'
-        ? 'Достатньо для оцінки — можна натиснути «Завершити тестування», коли будете готові.'
-        : 'Достатньо для оцінки цієї частини — можна натиснути «Завершити спілкування з клієнтом», коли будете готові.';
-      setNotice(nudgeMsg);
+      setNotice('Достатньо для оцінки цієї частини — можна натиснути «Завершити спілкування з клієнтом», коли будете готові.');
     }
 
     showTyping();
@@ -760,9 +913,8 @@ h1{
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
           messages: apiMessages,
-          openingText: currentPhase === 'team' ? teamOpeningText : openingText,
-          candidateName: candidateName,
-          phase: currentPhase
+          openingText: openingText,
+          candidateName: candidateName
         })
       });
       var data = null;
@@ -776,7 +928,7 @@ h1{
         setNotice(reasonCopy(data && data.error), true);
       } else {
         addMessage('client', data.text);
-        transcriptLines.push({ who: currentPhase === 'team' ? 'Команда' : 'Олександр', text: data.text });
+        transcriptLines.push({ who: 'Олександр', text: data.text });
         apiMessages.push({ role: 'assistant', content: data.text });
         messageCount++;
         updateCounter();
@@ -799,23 +951,13 @@ h1{
     messageCount = 0;
     candidateTurns = 0;
     nudged = false;
-    currentPhase = 'client';
-    apiMessagesClient = [];
-    apiMessagesTeam = [];
-    apiMessages = apiMessagesClient;
+    apiMessages = [];
     openingText = '';
-    teamOpeningText = '';
     transcriptLines = [];
+    lastTasksCount = 0;
     chatWindow.innerHTML = '';
     noticeArea.innerHTML = '';
     msgInput.value = '';
-
-    phaseLabel.textContent = 'Частина 1 з 2 · Спілкування з клієнтом';
-    chatAvatar.textContent = 'ОМ';
-    chatName.textContent = 'Олександр Меблі';
-    chatStatusText.textContent = 'онлайн';
-    msgInput.placeholder = 'Напишіть відповідь Олександру…';
-    turnHint.textContent = 'Орієнтир — 6–10 повідомлень';
 
     if (recRecorder && recRecorder.state !== 'inactive'){
       try{ recRecorder.stop(); }catch(e){}
@@ -830,11 +972,11 @@ h1{
     updateRecPill();
 
     screenChat.hidden = true;
-    screenTransition.hidden = true;
+    screenTasks.hidden = true;
     screenEnd.hidden = true;
     screenIntro.hidden = false;
-    finishBtn.disabled = false;
-    finishBtn.textContent = 'Завершити спілкування з клієнтом';
+    tasksFinishBtn.disabled = false;
+    tasksFinishBtn.textContent = 'Завершити тестування';
     nameInput.value = '';
     nameInput.style.borderColor = '';
     nameInput.focus();
@@ -855,14 +997,9 @@ h1{
   });
   restartBtn.addEventListener('click', restart);
   restartBtn2.addEventListener('click', restart);
-  startTeamBtn.addEventListener('click', goToTeamChat);
-  finishBtn.addEventListener('click', function(){
-    if (currentPhase === 'client'){
-      goToTransition();
-    } else {
-      finishTest();
-    }
-  });
+  finishBtn.addEventListener('click', goToTasks);
+  addTaskBtn.addEventListener('click', createTaskRow);
+  tasksFinishBtn.addEventListener('click', goToEndFromTasks);
 
   copyTranscriptBtn.addEventListener('click', async function(){
     var text = buildTranscript();
